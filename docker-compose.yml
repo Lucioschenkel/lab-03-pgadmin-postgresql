@@ -1,0 +1,31 @@
+version: '3.8'
+
+networks:
+  lab_03:
+    
+volumes:
+  pg_vol:
+
+services:
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    ports:
+      - '8080:80'
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=${AUTH_EMAIL}
+      - PGADMIN_DEFAULT_PASSWORD=${AUTH_PASSWORD}
+    networks:
+      - lab_03
+    depends_on:
+      - postgres
+  postgres:
+    image: postgres:16.1
+    restart: always
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    networks:
+      - lab_03
+    volumes:
+      - pg_vol:/var/lib/postgresql/data
